@@ -1,0 +1,40 @@
+# https://mojolicious.io/blog/2017/12/04/day-4-dont-fear-the-full-app/index.html
+
+Not quite sure what all this means... something about going from Lite (script) to Full (OO) apps
+
+The Keywords
+
+Now that the code lives in the right place, it needs to be translated to be Object Oriented. The first step is to place the logic into a method called startup, which takes the application object as its first argument.
+
+There are really three types of keywords, those that are the application object or methods on the application, those that are methods on the router, and group.
+
+The app keyword is just that invocant from before, so app becomes $app. The keywords helper, hook, and plugin are just methods on the app, so plugin ... becomes $app->plugin(...), etc.
+
+The routing methods
+
+    any
+    del (as delete)
+    get
+    options
+    patch
+    post
+    put
+    websocket
+
+are methods on route objects used exactly as they were before. To get the toplevel route object, call $app->routes; by convention we call this toplevel route object $r.
+
+get '/' => sub { ... } => 'route_name';
+
+becomes
+
+my $r = $app->routes;
+$r->get('/' => sub { ... } => 'route_name');
+... # add more toplevel routes to $r
+
+These are what we call 'hybrid routes'. They basically use the Lite arguments but are given to the methods. As you get deeper into Mojolicious, you might like setting up routes via attributes better than by a positional argument
+
+$r->get('/')->to(cb => sub { ... })->name('route_name');
+
+but either way works, choose the one you like! TIMTOWTDI again.
+
+If you've only used those keywords above, translate them as I just showed you and you're done.
